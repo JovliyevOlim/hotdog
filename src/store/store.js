@@ -5,7 +5,7 @@ import supplierReducer from "../api/supplier/supplierSlice";
 import categoryReducer from "../api/category/categorySlice";
 import productsReducer from "../api/products/productsSlice";
 import modifyReducer from "../api/modify/modifySlice";
-import purchaseReducer from "../api/purchase/PurchaseSlice";
+import purchaseReducer from "../api/purchase/purchaseSlice";
 import rootSaga from "./rootSaga";
 
 const sagaMiddleware = createSagaMiddleware();
