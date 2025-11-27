@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Vite cache
+.vite/
+vite.config.ts.timestamp*
+
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+*.log
+
+# Editor folders
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Optional: local dev tools
+coverage/
