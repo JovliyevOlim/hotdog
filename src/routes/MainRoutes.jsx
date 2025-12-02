@@ -9,6 +9,7 @@ import Products from "../pages/products";
 import AddProduct from "../sections/products/AddProducts";
 import Modify from "../pages/modify";
 import Purchase from "../pages/purchase";
+import Sales from "../pages/sales";
 
 // render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
@@ -63,6 +64,10 @@ const MainRoutes = {
     {
       path: 'purchase',
       element: <Purchase />
+    },
+    {
+      path: 'sales',
+      element: <Sales />
     },
     {
       path: 'typography',

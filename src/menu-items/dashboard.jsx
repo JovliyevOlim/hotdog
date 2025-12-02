@@ -1,9 +1,9 @@
 // assets
-import { DashboardOutlined,ProductOutlined,BlockOutlined,UserOutlined,ShoppingCartOutlined } from '@ant-design/icons';
+import { DashboardOutlined,ProductOutlined,BlockOutlined,UserOutlined,ShoppingCartOutlined ,ShopOutlined} from '@ant-design/icons';
 
 // icons
 const icons = {
-  DashboardOutlined,ProductOutlined,BlockOutlined,UserOutlined,ShoppingCartOutlined
+  DashboardOutlined,ProductOutlined,BlockOutlined,UserOutlined,ShoppingCartOutlined,ShopOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -58,6 +58,14 @@ const dashboard = {
       type: 'item',
       url: '/purchase',
       icon: icons.ShoppingCartOutlined,
+      breadcrumbs: false
+    },
+    {
+      id: 'sales',
+      title: "Savdo",
+      type: 'item',
+      url: '/sales',
+      icon: icons.ShopOutlined,
       breadcrumbs: false
     }
   ]
