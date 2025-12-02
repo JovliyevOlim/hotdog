@@ -9,6 +9,7 @@ function* loginWorker(action) {
     try {
         const response = yield call(authApi.login, action.payload);
         setItems('token', response.token);
+        setItems('user', response);
         yield put(loginSuccess(response));
     } catch (err) {
         yield put(loginFailed(err.response?.data?.message || err.message));
@@ -20,6 +21,7 @@ function* registerWorker(action) {
     try {
         const response = yield call(authApi.register, action.payload);
         setItems('token',response.token);
+        setItems('user', response);
         yield put(registerSuccess(response));
     } catch (err) {
         yield put(registerFailed(err.response?.data?.message || err.message));

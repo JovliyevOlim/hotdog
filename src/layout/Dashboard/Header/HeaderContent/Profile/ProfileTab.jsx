@@ -53,6 +53,7 @@ export default function ProfileTab() {
                 dispatch(logout());
                 navigate('/login');
                 removeItem('token')
+                removeItem('user')
             }}>
                 <ListItemIcon>
                     <LogoutOutlined/>
