@@ -21,7 +21,6 @@ function Index(props) {
 
 
     function onDelete(id) {
-        console.log(id)
         dispatch(deleteProductRequest(id));
     }
 
@@ -46,7 +45,7 @@ function Index(props) {
             label: 'Olish narxi',
             render: (value) => (
                 <Stack direction="row" sx={{gap: 1, alignItems: 'center'}}>
-                    {value.toFixed(2) || 0} so'm
+                    {value ?  value.toFixed(2) || 0 : 0} so'm
                 </Stack>
             )
         },
@@ -86,7 +85,6 @@ function Index(props) {
         }
     ]
 
-    console.log(products);
     return (
         <Grid rowSpacing={4.5} columnSpacing={2.75}>
             <MainCard title="Mahsulotlar"

@@ -5,7 +5,7 @@ function Image({url}) {
 
     console.log('url', url);
     return (
-        <ImageList sx={{width:100, height: 100}} cols={1}>
+        <ImageList sx={{width:100, height: 150}} cols={1}>
             <ImageListItem key={url}>
                 <img
                     srcSet={url}

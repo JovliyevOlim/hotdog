@@ -131,7 +131,9 @@ function Purchase() {
                                             {({push, remove}) => (
                                                 <Box display="flex" flexDirection="column" gap={2}>
                                                     <Grid item size={12}>
-                                                        <SearchInput push={push} text={'Mahsulotni qidirish'}
+                                                        <SearchInput push={(findProduct)=>{
+                                                            push({name: findProduct.name, productId: findProduct.id, quantity: 1, purchaseCost: findProduct.price});
+                                                        }} text={'Mahsulotni qidirish'}
                                                                      search={searchInput}
                                                                      setSearchInput={setSearchInput}/>
                                                     </Grid>

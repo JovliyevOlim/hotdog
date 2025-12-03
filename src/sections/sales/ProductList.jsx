@@ -12,7 +12,7 @@ export default function ProductList({list}) {
     return (
         <Paper sx={{width: '100%', overflow: 'hidden', backgroundColor: 'transparent'}}>
             <TableContainer sx={{maxHeight: 440}}>
-                <Table stickyHeader size="small" aria-label="a dense table">
+                <Table stickyHeader sx={{backgroundColor: 'transparent'}} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Nomi</TableCell>

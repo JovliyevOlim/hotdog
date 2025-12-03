@@ -7,7 +7,12 @@ export default function ProductCard({item, setProducts}) {
     return (
         <Card sx={{width: '100%'}} onClick={() => setProducts(item)}>
             <CardMedia
-                sx={{height: 100}}
+                sx={{
+                    height: 150,          // balandlikni xohlagancha oshirsa bo‘ladi
+                    width: '100%',        // kartani to‘liq egallaydi
+                    objectFit: 'cover',   // butunlay to‘ldiradi
+                    borderRadius: '8px'
+                }}
                 image={item.imageUrl}
                 title="green iguana"
             />

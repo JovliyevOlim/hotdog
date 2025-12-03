@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import * as Yup from "yup";
 import Grid from "@mui/material/Grid2";
 import Button from "@mui/material/Button";
-import {Formik} from "formik";
+import {FieldArray, Formik, getIn} from "formik";
 import AnimateButton from "../../components/@extended/AnimateButton";
 import MainCard from "../../components/MainCard";
 import CommonInput from "../../components/CommonInput";
@@ -14,11 +14,21 @@ import FormHelperText from "@mui/material/FormHelperText";
 import {useDispatch, useSelector} from "react-redux";
 import {getCategoryRequest} from "../../api/category/categorySlice";
 import {useNavigate} from "react-router";
-import {addProductImageRequest, addProductRequest, resetSuccess} from "../../api/products/productsSlice";
+import {
+    addProductImageRequest,
+    addProductRequest,
+    getProductSearchRequest,
+    resetSuccess
+} from "../../api/products/productsSlice";
 import {getModifyRequest} from "../../api/modify/modifySlice";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {FormLabel, Radio, RadioGroup, Switch} from "@mui/material";
 import UploadPreview from "../../components/UploadImage";
+import Box from "@mui/material/Box";
+import SearchInput from "../../components/SearchInput";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import IconButton from "../../components/@extended/IconButton";
 
 function AddProduct() {
 
@@ -28,6 +38,16 @@ function AddProduct() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [file, setFile] = useState(null);
+    const [searchInput, setSearchInput] = useState("");
+
+
+    const handleChange = () => {
+        dispatch(getProductSearchRequest(searchInput));
+    };
+
+    useEffect(() => {
+        handleChange()
+    }, [searchInput]);
 
     useEffect(() => {
         dispatch(getCategoryRequest())
@@ -79,14 +99,16 @@ function AddProduct() {
                             lowQuantity: 0,
                             categoryId: '',
                             modifierGroupIds: '',
+                            ingredients: [],
                         }}
                         validationSchema={Yup.object().shape({
                             name: Yup.string().required('Nomi kiriting!'),
                             categoryId: Yup.string().required('Kategoriya tanlang!'),
                         })}
                         onSubmit={(values, {setSubmitting, setErrors}) => {
+                            console.log(values)
                             try {
-                                dispatch(addProductRequest({...values, modifierGroupIds: [values.modifierGroupIds]}));
+                                dispatch(addProductRequest({...values, modifierGroupIds:values.modifierGroupIds? [values.modifierGroupIds]:[]}));
                                 setSubmitting(false);
                             } catch (err) {
                                 setErrors({submit: err.message});
@@ -187,6 +209,17 @@ function AddProduct() {
                                             }
                                             label="Sotiladiganmi"
                                         />
+                                        <FormControlLabel
+                                            control={
+                                                <Switch
+                                                    name="trackStock"
+                                                    checked={values.trackStock}
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                />
+                                            }
+                                            label="Omborda sanaladimi"
+                                        />
                                     </Grid>
 
                                     <Grid item size={{xs: 12, sm: 12, md: 3}}>
@@ -201,7 +234,7 @@ function AddProduct() {
                                                 onBlur={handleBlur}
                                             >
                                                 <FormControlLabel value="EACH" control={<Radio/>} label="Donali"/>
-                                                <FormControlLabel value="NO_EACH" control={<Radio/>} label="Kgli"/>
+                                                <FormControlLabel value="WEIGHT" control={<Radio/>} label="Kgli"/>
                                             </RadioGroup>
 
                                             {touched.soldBy && errors.soldBy && (
@@ -210,6 +243,69 @@ function AddProduct() {
                                         </FormControl>
                                     </Grid>
                                     <UploadPreview file={file} setFile={setFile}/>
+                                    <Grid item size={12}>
+                                        <InputLabel htmlFor="modifierGroupIds" marginBottom={2}>
+                                            Ichki mahsulot qo'shish
+                                        </InputLabel>
+                                        <FieldArray name="ingredients">
+                                            {({push, remove}) => (
+                                                <Box display="flex" flexDirection="column" gap={2}>
+                                                    <Grid item size={12}>
+                                                        <SearchInput  push={(findProduct)=>{
+                                                            push({name: findProduct.name, ingredientProductId: findProduct.id, quantity: 1});
+                                                        }} text={'Mahsulotni qidirish'}
+                                                                     search={searchInput}
+                                                                     setSearchInput={setSearchInput}/>
+                                                    </Grid>
+                                                    {values.ingredients.map((item, index) => {
+                                                        const prodError = getIn(errors, `ingredients[${index}].ingredientProductId`);
+                                                        const prodTouched = getIn(
+                                                            touched,
+                                                            `ingredients[${index}].ingredientProductId`
+                                                        );
+
+                                                        const qtyError = getIn(errors, `ingredients[${index}].quantity`);
+                                                        const qtyTouched = getIn(touched, `ingredients[${index}].quantity`);
+
+                                                        return (
+                                                            <Grid
+                                                                key={index}
+                                                                container
+                                                                spacing={12}
+                                                            >
+                                                                <Typography>  {item.name}</Typography>
+
+                                                                <TextField
+                                                                    label="Quantity"
+                                                                    name={`ingredients[${index}].quantity`}
+                                                                    value={item.quantity}
+                                                                    onChange={handleChange}
+                                                                    onBlur={handleBlur}
+                                                                    error={Boolean(qtyError && qtyTouched)}
+                                                                    helperText={qtyTouched && qtyError ? qtyError : ""}
+                                                                    size="small"
+                                                                    type="number"
+                                                                    inputProps={{min: 1}}
+                                                                    sx={{width: 130}}
+                                                                />
+
+
+                                                                {/* Remove button (agar 1 ta bo'lsa o'chirmaslik ham mumkin) */}
+                                                                <IconButton
+                                                                    aria-label="delete"
+                                                                    color="error"
+                                                                    onClick={() => remove(index)}
+                                                                    disabled={values.ingredients.length === 1}
+                                                                >
+                                                                    {/*<DeleteIcon />*/}
+                                                                </IconButton>
+                                                            </Grid>
+                                                        );
+                                                    })}
+                                                </Box>
+                                            )}
+                                        </FieldArray>
+                                    </Grid>
                                     <Grid item size={12}>
                                         <AnimateButton>
                                             <Button type='submit' loading={isLoading} fullWidth size="large"

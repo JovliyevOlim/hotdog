@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Box from "@mui/material/Box";
 import Products from "../../sections/sales/Products";
 import CashProduct from "../../sections/sales/CashProduct";
+import Button from "@mui/material/Button";
 
 function Index(props) {
 
@@ -9,10 +10,10 @@ function Index(props) {
 
     return (
         <Box sx={{display: 'flex', width: '100%', height: '100vh'}}>
-            <Box component="main" bgcolor='red' sx={{width: '500px'}}>
-                <CashProduct list={salesProductList}/>
+            <Box component="main" bgcolor='orange' sx={{width: '500px'}}>
+                <CashProduct list={salesProductList} setList={setSalesProductList} />
             </Box>
-            <Box component="main" bgcolor='blue' sx={{width: 'calc(100% - 500px)', flexGrow: 1, p: {xs: 2, sm: 3}}}>
+            <Box component="main" sx={{width: 'calc(100% - 500px)', flexGrow: 1, p: {xs: 2, sm: 3}}}>
                 <Products list={salesProductList} setList={setSalesProductList}/>
             </Box>
         </Box>);

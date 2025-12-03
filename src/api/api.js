@@ -1,7 +1,8 @@
 import axios from "axios";
 import {getItems} from "../utils/utils";
 
-export const baseUrl = "https://75.119.159.238:8080/api"
+// export const baseUrl = "http://75.119.159.238:8080/api"/
+export const baseUrl = "https://superhotdog.duckdns.org/api"
 // Base axios instance
 const api = axios.create({
     baseURL:baseUrl, // backend URL

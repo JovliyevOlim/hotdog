@@ -23,6 +23,19 @@ const slice = createSlice({
         },
 
 
+        addSalesRequest: (state) => {
+            state.isLoading = true;
+            state.error = null
+        },
+        addSalesSuccess: (state, action) => {
+            state.productId = action.payload.id
+            state.isLoading = false
+            state.isSuccess = true;
+        },
+        addSalesFailed: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload
+        },
 
         resetSuccess: (state) => {
             state.isSuccess = false
@@ -36,6 +49,9 @@ export const {
     addPurchaseSuccess,
     addPurchaseFailed,
     addPurchaseRequest,
+    addSalesSuccess,
+    addSalesFailed,
+    addSalesRequest,
     resetSuccess,
 } = slice.actions;
 export default slice.reducer;
