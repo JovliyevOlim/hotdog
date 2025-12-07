@@ -53,14 +53,11 @@ function Products({list, setList}) {
                     : item
             );
         } else {
-            newList = [...list, newProduct];
+            newList = [newProduct, ...list];
         }
 
         setList(newList);
     }
-
-
-
 
 
     return (

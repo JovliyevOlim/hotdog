@@ -1,15 +1,4 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import {DeleteOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
-import productListCard from "./ProductListCard";
 import ProductListCard from "./ProductListCard";
 
 
@@ -40,7 +29,7 @@ export default function ProductList({list, setList}) {
     return (
         <Box sx={{flexGrow: 1, height: 'calc(100vh - 250px)', overflowY: 'scroll'}}>
             {
-                list?.reverse().map(item =>
+                list?.map(item =>
                     <ProductListCard item={item} key={item.id} decrease={decrease} remove={remove} increase={increase}/>
                 )
             }
