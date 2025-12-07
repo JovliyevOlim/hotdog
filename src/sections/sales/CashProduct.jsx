@@ -1,6 +1,5 @@
 import React, {useEffect, useRef} from 'react';
 import Box from "@mui/material/Box";
-import {ImageList, ImageListItem} from "@mui/material";
 import logo from "../../assets/hotdog.png"
 import ProductList from "./ProductList";
 import Typography from "@mui/material/Typography";
@@ -8,6 +7,7 @@ import Button from "@mui/material/Button";
 import {useDispatch, useSelector} from "react-redux";
 import {addSalesRequest, resetSuccess} from "../../api/purchase/purchaseSlice";
 import {useReactToPrint} from "react-to-print";
+import Clock from "./Clock";
 
 function CashProduct({list, setList}) {
 
@@ -40,35 +40,43 @@ function CashProduct({list, setList}) {
         <Box sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100vh",
+            height: "100%",
             justifyContent: "space-between",
         }}>
             <Box>
-                <Box sx={{display: 'flex', width: '100%', justifyContent: 'center'}}>
-                    <ImageList sx={{width: 80, height: 80}} cols={1}>
-                        <ImageListItem>
-                            <img
-                                srcSet={logo}
-                                src={logo}
-                                loading="lazy"
-                            />
-                        </ImageListItem>
-                    </ImageList>
+                <Box sx={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: '20px',
+                }}>
+                    <Typography variant='h4' color='black'>
+                        Order 20
+                    </Typography>
+                    <Typography variant='h6' color='black'>
+                        <Clock/>
+                    </Typography>
                 </Box>
-                <Box sx={{display: 'flex', width: '100%', justifyContent: 'center'}}>
-                    <ProductList list={list}/>
+                <Box sx={{display: 'flex', width: '100%', justifyContent: 'center', marginTop: '1rem'}}>
+                    <ProductList list={list} setList={setList}/>
                 </Box>
             </Box>
             <Box>
-                <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between', padding: '1rem'}}>
-                    <Typography variant='h2'>
+                <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
+                    <Typography variant='h4'>
                         Jami:
                     </Typography>
-                    <Typography variant='h2'>
-                        {allSum()} so'm
+                    <Typography variant='h4'>
+                        {allSum().toLocaleString()} so'm
                     </Typography>
                 </Box>
-                <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between', padding: '1rem'}}>
+                <Box sx={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    marginTop: '10px',
+                }}>
                     <Button onClick={handleSubmit} loading={isLoading} sx={{display: 'flex', width: '100%'}}
                             size='large'
                             variant='contained' color="primary">
@@ -78,20 +86,33 @@ function CashProduct({list, setList}) {
                 <Box display={'none'}>
                     <div ref={contentRef}>
                         <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between', padding: '1rem'}}>
-                            <Typography variant='h2'>
-                                Sana
+                            <Typography variant='h3'>
+                                Order 20
                             </Typography>
-                            <Typography variant='h2'>
+                            <Typography variant='h3'>
                                 {new Date().toLocaleString('uz-UZ')}
                             </Typography>
                         </Box>
-                        <ProductList list={list}/>
+                        <Box sx={{padding: '1rem'}}>
+                            {
+                                list.map((item, index) =>
+                                    <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
+                                        <Typography variant='h4'>                    {item.name}
+                                        </Typography>
+                                        <Typography variant='h4'>
+                                            {item?.price} x {item?.quantity} = {(item?.price * item.quantity).toLocaleString()} so'm
+                                        </Typography>
+                                    </Box>
+                                )
+                            }
+
+                        </Box>
                         <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between', padding: '1rem'}}>
-                            <Typography variant='h2'>
+                            <Typography variant='h3'>
                                 Jami:
                             </Typography>
-                            <Typography variant='h2'>
-                                {allSum()} so'm
+                            <Typography variant='h3'>
+                                {allSum().toLocaleString()} so'm
                             </Typography>
                         </Box>
                     </div>

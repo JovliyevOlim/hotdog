@@ -5,23 +5,47 @@ import Typography from '@mui/material/Typography';
 
 export default function ProductCard({item, setProducts}) {
     return (
-        <Card sx={{width: '100%'}} onClick={() => setProducts(item)}>
+        <Card
+            onClick={() => setProducts(item)}
+            sx={{
+                cursor: 'pointer',
+                borderRadius: 2,
+                border: '1px solid #dadbdc',
+                boxShadow: 0,
+                transition: '0.2s',
+                height: 150,
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
             <CardMedia
-                sx={{
-                    height: 150,          // balandlikni xohlagancha oshirsa bo‘ladi
-                    width: '100%',        // kartani to‘liq egallaydi
-                    objectFit: 'cover',   // butunlay to‘ldiradi
-                    borderRadius: '8px'
-                }}
+                component="img"
                 image={item.imageUrl}
-                title="green iguana"
+                alt={item.name}
+                sx={{
+                    height: 100,         // mukammal balandlik
+                    width: '100%',
+                    objectFit: 'contain',  // rasmni proporsional to'ldiradi
+                    borderTopLeftRadius: 8,
+                    borderTopRightRadius: 8,
+                }}
             />
-            <CardContent>
-                <Typography gutterBottom variant="h5" textAlign='center' component="div">
+
+            <CardContent sx={{textAlign: 'center', padding: '5px !important'}}>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        fontWeight: 600,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                    }}
+                >
                     {item.name}
                 </Typography>
-                <Typography variant="body2" textAlign='center' component="div">
-                    {item.price} so'm
+
+                <Typography variant="body1" sx={{fontWeight: 700,color:'red'}}>
+                    {item.price ? item?.price.toLocaleString() : 0} so'm
                 </Typography>
             </CardContent>
         </Card>

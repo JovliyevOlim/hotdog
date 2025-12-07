@@ -30,32 +30,23 @@ export default function DashboardLayout() {
 
     return (
         <Box sx={{display: 'flex', width: '100%'}}>
-            {
-                pathname === '/sales' ? <>
-                        <Outlet/>
-                    </>
-                    : <>
-                        <Header/>
-                        <Drawer/>
+            <Header/>
+            <Drawer/>
 
-                        <Box component="main" sx={{width: 'calc(100% - 260px)', flexGrow: 1, p: {xs: 2, sm: 3}}}>
-                            <Toolbar sx={{mt: 'inherit'}}/>
-                            <Box
-                                sx={{
-                                    ...{px: {xs: 0, sm: 2}},
-                                    position: 'relative',
-                                    minHeight: 'calc(100vh - 110px)',
-                                    display: 'flex',
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                {pathname !== '/apps/profiles/account/my-account' && <Breadcrumbs/>}
-                                <Outlet/>
-                                <Footer/>
-                            </Box>
-                        </Box>
-                    </>
-            }
+            <Box component="main" sx={{width: 'calc(100% - 260px)', flexGrow: 1,padding:'10px', boxSizing: 'border-box'}}>
+                <Toolbar sx={{mt: 'inherit'}}/>
+                <Box
+                    sx={{
+                        position: 'relative',
+                        height: 'calc(100vh - 80px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
+                    {pathname !== '/apps/profiles/account/my-account' && <Breadcrumbs/>}
+                    <Outlet/>
+                </Box>
+            </Box>
 
         </Box>
     );

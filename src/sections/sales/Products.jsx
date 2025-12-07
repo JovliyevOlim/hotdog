@@ -7,12 +7,19 @@ import {getCategoryRequest} from "../../api/category/categorySlice";
 import {getProductRequest} from "../../api/products/productsSlice";
 import ProductCard from "./ProductCard";
 import Grid from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
 
 function Products({list, setList}) {
     const dispatch = useDispatch();
     const {category} = useSelector((state) => state.category);
     const {products} = useSelector((state) => state.products);
-    const [filterProducts, setFilterProducts] = useState([]);
+    const arr = Array.from({length: 20}, (_, i) => ({
+        id: i + 1,
+        name: `Product ${i + 1}`,
+        price: Math.floor(Math.random() * 10000),
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1wIfe0OTZTVrAiTPYoQaxXui6L2P4FSYVbA&s"
+    }));
+    const [filterProducts, setFilterProducts] = useState(arr);
 
     const [categoryId, setCategoryId] = useState(null);
 
@@ -52,30 +59,46 @@ function Products({list, setList}) {
         setList(newList);
     }
 
+
+
+
+
     return (
         <Box>
-            <ButtonGroup aria-label="Basic button group" size="large">
-                {
-                    category && category.map(cat =>
-                        <Button key={cat.id}
-                                variant={categoryId === cat.id ? "contained" : "outlined"}
-                                color={categoryId === cat.id ? "primary" : "inherit"}
-                                onClick={() => setCategoryId(cat.id)}>{cat.name}</Button>
-                    )
-                }
-            </ButtonGroup>
-            <Box sx={{flexGrow: 1}} marginTop={4}>
-                <Grid container direction="column" spacing={2}>
+            <Box sx={{flexGrow: 1}}>
+                <ButtonGroup aria-label="Basic button group" size="small">
+                    {
+                        category && category.map(cat =>
+                            <Button key={cat.id}
+                                    sx={{fontSize: '1.5rem'}}
+                                    variant={categoryId === cat.id ? "contained" : "outlined"}
+                                    color={categoryId === cat.id ? "primary" : "inherit"}
+                                    onClick={() => setCategoryId(cat.id)}>{cat.name}</Button>
+                        )
+                    }
+                </ButtonGroup>
+            </Box>
+
+            <Box sx={{flexGrow: 1, height: 'calc(100vh - 80px)', overflow: 'hidden'}}>
+                <Grid container
+                      spacing={2}
+                      justifyContent="start"
+                      sx={{
+                          flexGrow: 1,
+                          height: '100%',
+                          overflowY: 'auto',
+                          paddingRight: '6px',
+                          marginTop: '10px'
+                      }}
+                >
                     {
                         filterProducts && filterProducts.length > 0 ?
-                            <Grid item size={{md: 2, sm: 4}}>
-                                {
-                                    filterProducts.map(product => (
-                                        <ProductCard item={product} key={product.id} setProducts={setProducts}/>
-                                    ))
-                                }
-                            </Grid>
-                            : <h2>Mahsulot yo'q</h2>
+                            filterProducts.map(product => (
+                                <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
+                                    <ProductCard item={product} key={product.id} setProducts={setProducts}/>
+                                </Grid>
+                            ))
+                            : <Typography sx={{width: '100%'}} variant={'h2'} align='center'>Mahsulot yo'q</Typography>
                     }
                 </Grid>
 

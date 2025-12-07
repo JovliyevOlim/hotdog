@@ -5,39 +5,45 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import {DeleteOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
+import productListCard from "./ProductListCard";
+import ProductListCard from "./ProductListCard";
 
 
-export default function ProductList({list}) {
+export default function ProductList({list, setList}) {
+
+
+    const increase = (id) => {
+        setList(prev =>
+            prev.map(item =>
+                item.productId === id ? {...item, quantity: item.quantity + 1} : item
+            )
+        );
+    };
+
+    const decrease = (id) => {
+        setList(prev =>
+            prev
+                .map(item =>
+                    item.productId === id ? {...item, quantity: Math.max(1, item.quantity - 1)} : item
+                )
+        );
+    };
+
+    const remove = (id) => {
+        setList(prev => prev.filter(item => item.productId !== id));
+    };
 
     return (
-        <Paper sx={{width: '100%', overflow: 'hidden', backgroundColor: 'transparent'}}>
-            <TableContainer sx={{maxHeight: 440}}>
-                <Table stickyHeader sx={{backgroundColor: 'transparent'}} size="small" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Nomi</TableCell>
-                            <TableCell align="right">Soni</TableCell>
-                            <TableCell align="right">Narxi</TableCell>
-                            <TableCell align="right">Jami</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {list.map((row) => (
-                            <TableRow
-                                key={row.name}
-                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="right">{row.quantity}</TableCell>
-                                <TableCell align="right">{row.price}</TableCell>
-                                <TableCell align="right">{row.price * row.quantity}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>
+        <Box sx={{flexGrow: 1, height: 'calc(100vh - 250px)', overflowY: 'scroll'}}>
+            {
+                list?.reverse().map(item =>
+                    <ProductListCard item={item} key={item.id} decrease={decrease} remove={remove} increase={increase}/>
+                )
+            }
+        </Box>
     );
 }
