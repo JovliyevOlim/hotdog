@@ -1,13 +1,23 @@
 import React, {useState} from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
 
 export default function UploadPreview({file,setFile}) {
     const [previewUrl, setPreviewUrl] = useState(null);
+    const [error, setError] = useState(null);
 
     const handleFileChange = (e) => {
+        setError(null);
         const selected = e.target.files?.[0];
         if (!selected) return;
+
+        const MAX_SIZE = 3 * 1024 * 1024; // 3MB
+
+        if (selected.size > MAX_SIZE) {
+            setError("Fayl hajmi 3MB dan oshmasligi kerak!");
+            return;
+        }
 
         setFile(selected);
 
@@ -31,6 +41,9 @@ export default function UploadPreview({file,setFile}) {
                     Choose File
                 </Button>
             </label>
+            <Typography variant="body2" component="p" color={'red'}>
+                {error}
+            </Typography>
 
             {/* File name */}
             {file && <p>Tanlangan fayl: {file.name}</p>}

@@ -1,10 +1,12 @@
-import { all } from "redux-saga/effects";
+import {all} from "redux-saga/effects";
 import authSaga from "../api/auth/authSaga";
 import supplierSaga from "../api/supplier/supplierSaga";
 import categorySaga from "../api/category/categorySaga";
 import productsSaga from "../api/products/productsSaga";
 import modifySaga from "../api/modify/modifySaga";
 import purchaseSaga from "../api/purchase/purchaseSaga";
+import reportSaga from "../api/report/reportSaga";
+
 export default function* rootSaga() {
-    yield all([authSaga(),supplierSaga(),categorySaga(),productsSaga(),modifySaga(),purchaseSaga()]);
+    yield all([authSaga(), supplierSaga(), categorySaga(), productsSaga(), modifySaga(), purchaseSaga(), reportSaga()]);
 }

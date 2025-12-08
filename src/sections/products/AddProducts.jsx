@@ -55,7 +55,6 @@ function AddProduct() {
     }, [])
 
 
-    console.log("productId", productId);
 
     useEffect(() => {
         if (isSuccess) {
@@ -63,7 +62,6 @@ function AddProduct() {
                 dispatch(resetSuccess())
                 navigate('/products')
             }
-            console.log(productId)
             const formData = new FormData();
             formData.append("file", file);
             dispatch(addProductImageRequest({

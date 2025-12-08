@@ -6,6 +6,7 @@ import categoryReducer from "../api/category/categorySlice";
 import productsReducer from "../api/products/productsSlice";
 import modifyReducer from "../api/modify/modifySlice";
 import purchaseReducer from "../api/purchase/purchaseSlice";
+import reportReducer from "../api/report/reportSlice";
 import rootSaga from "./rootSaga";
 
 const sagaMiddleware = createSagaMiddleware();
@@ -17,7 +18,8 @@ export const store = configureStore({
         category: categoryReducer,
         products: productsReducer,
         modify: modifyReducer,
-        purchase: purchaseReducer
+        purchase: purchaseReducer,
+        report:reportReducer,
     },
     middleware: (getDefault) => getDefault({thunk: false}).concat(sagaMiddleware),
 });
