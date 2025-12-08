@@ -50,7 +50,7 @@ export default function AuthLogin({isDemo = false}) {
 
     useEffect(() => {
         if (getItems('token')) {
-            navigate('/dashboard');
+            navigate('/dashboard/default');
         }
     },[isLoading]);
 

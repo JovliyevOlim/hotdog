@@ -52,7 +52,7 @@ export default function AuthRegister() {
 
     useEffect(() => {
         if (getItems('token')) {
-            navigate('/dashboard');
+            navigate('/dashboard/default');
         }
     }, [isLoading]);
 
