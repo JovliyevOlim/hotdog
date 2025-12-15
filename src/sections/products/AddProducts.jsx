@@ -13,12 +13,12 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import {useDispatch, useSelector} from "react-redux";
 import {getCategoryRequest} from "../../api/category/categorySlice";
-import {useNavigate} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {
     addProductImageRequest,
-    addProductRequest,
+    addProductRequest, getProductByIdRequest,
     getProductSearchRequest,
-    resetSuccess
+    resetSuccess, updateProductRequest
 } from "../../api/products/productsSlice";
 import {getModifyRequest} from "../../api/modify/modifySlice";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -34,11 +34,58 @@ function AddProduct() {
 
     const {category} = useSelector((state) => state.category)
     const {modify} = useSelector((state) => state.modify)
-    const {isLoading, isSuccess, productId, isImageSuccess} = useSelector((state) => state.products)
+    const {isLoading, isSuccess, productId, isImageSuccess, product} = useSelector((state) => state.products)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const params = useParams();
     const [file, setFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
     const [searchInput, setSearchInput] = useState("");
+    const [initialValues, setInitialValues] = useState({
+        name: '',
+        description: '',
+        availableForSale: false,
+        soldBy: "EACH",
+        price: '',
+        cost: '',
+        sku: '',
+        composite: false,
+        trackStock: false,
+        quantity: 0,
+        lowQuantity: 0,
+        categoryId: '',
+        modifierGroupIds: '',
+        ingredients: [],
+    })
+
+
+    useEffect(() => {
+        if (params.id) {
+            dispatch(getProductByIdRequest(params.id))
+        }
+    }, [params])
+
+    useEffect(() => {
+        if (params.id && product) {
+            setInitialValues({
+                name: product.name,
+                description: product.description,
+                availableForSale: product.availableForSale,
+                soldBy: product.soldBy,
+                price: product.price,
+                cost: product.cost,
+                sku: product.sku,
+                composite: product.composite,
+                trackStock: product.trackStock,
+                quantity: product.quantity,
+                lowQuantity: product.lowQuantity,
+                categoryId: product.category?.id,
+                modifierGroupIds: product.modifierGroups.length > 0 && product.modifierGroups[0]?.id,
+                ingredients: [],
+            })
+            setImageUrl(product?.imageUrl)
+        }
+    }, [product])
 
 
     const handleChange = () => {
@@ -55,19 +102,19 @@ function AddProduct() {
     }, [])
 
 
-
     useEffect(() => {
         if (isSuccess) {
             if (!file) {
                 dispatch(resetSuccess())
                 navigate('/products')
+            } else {
+                const formData = new FormData();
+                formData.append("file", file);
+                dispatch(addProductImageRequest({
+                    id: productId,
+                    image: formData,
+                }))
             }
-            const formData = new FormData();
-            formData.append("file", file);
-            dispatch(addProductImageRequest({
-                id: productId,
-                image: formData,
-            }))
         }
     }, [isSuccess])
 
@@ -83,34 +130,36 @@ function AddProduct() {
             <Grid rowSpacing={4.5} columnSpacing={2.75}>
                 <MainCard title="Mahsulotlar qo'shish">
                     <Formik
-                        initialValues={{
-                            name: '',
-                            description: '',
-                            availableForSale: false,
-                            soldBy: "EACH",
-                            price: '',
-                            cost: '',
-                            sku: '',
-                            composite: false,
-                            trackStock: false,
-                            quantity: 0,
-                            lowQuantity: 0,
-                            categoryId: '',
-                            modifierGroupIds: '',
-                            ingredients: [],
-                        }}
+                        enableReinitialize={true}
+                        initialValues={initialValues}
                         validationSchema={Yup.object().shape({
                             name: Yup.string().required('Nomi kiriting!'),
                             categoryId: Yup.string().required('Kategoriya tanlang!'),
                         })}
                         onSubmit={(values, {setSubmitting, setErrors}) => {
-                            console.log(values)
-                            try {
-                                dispatch(addProductRequest({...values, modifierGroupIds:values.modifierGroupIds? [values.modifierGroupIds]:[]}));
-                                setSubmitting(false);
-                            } catch (err) {
-                                setErrors({submit: err.message});
-                                setSubmitting(false);
+                            if (params.id) {
+                                try {
+                                    dispatch(updateProductRequest({
+                                        ...values,
+                                        modifierGroupIds: values.modifierGroupIds ? [values.modifierGroupIds] : [],
+                                        id: params.id,
+                                    }));
+                                    setSubmitting(false);
+                                } catch (err) {
+                                    setErrors({submit: err.message});
+                                    setSubmitting(false);
+                                }
+                            } else {
+                                try {
+                                    dispatch(addProductRequest({
+                                        ...values,
+                                        modifierGroupIds: values.modifierGroupIds ? [values.modifierGroupIds] : []
+                                    }));
+                                    setSubmitting(false);
+                                } catch (err) {
+                                    setErrors({submit: err.message});
+                                    setSubmitting(false);
+                                }
                             }
                         }}
                     >
@@ -118,9 +167,7 @@ function AddProduct() {
                             <form noValidate onSubmit={handleSubmit}>
                                 <Grid container spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}
                                       alignItems="top">
-                                    <CommonInput name={'name'} label={'Nomi'} type={'text'} errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
+                                    <CommonInput name={'name'} label={'Nomi'} type={'text'}/>
                                     <Grid item size={{xs: 12, sm: 12, md: 3}}>
                                         <FormControl fullWidth>
                                             <InputLabel htmlFor="categoryId">
@@ -175,26 +222,14 @@ function AddProduct() {
                                             )}
                                         </FormControl>
                                     </Grid>
-                                    <CommonInput name={'description'} label={'Tavsif'} type={'text'} errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
-                                    <CommonInput name={'quantity'} label={'Miqdor'} type={'number'} errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
-                                    <CommonInput name={'lowQuantity'} label={'Ogohlantirish miqdori'} type={'number'}
-                                                 errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
-                                    <CommonInput name={'cost'} label={'Olish narxi'} type={'number'} errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
-                                    <CommonInput name={'price'} label={'Sotish narxi'} type={'number'} errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
+                                    <CommonInput name={'description'} label={'Tavsif'} type={'text'}
+                                                 placeholder={'Tavsif'}/>
+                                    <CommonInput name={'quantity'} label={'Miqdor'} type={'number'} />
+                                    <CommonInput name={'lowQuantity'} label={'Ogohlantirish miqdori'} type={'number'}/>
+                                    <CommonInput name={'cost'} label={'Olish narxi'} type={'number'}/>
+                                    <CommonInput name={'price'} label={'Sotish narxi'} type={'number'} />
 
-                                    <CommonInput name={'sku'} label={'Sku'} type={'text'} errors={errors}
-                                                 values={values} touched={touched} handleChange={handleChange}
-                                                 handleBlur={handleBlur}/>
+                                    <CommonInput name={'sku'} label={'Sku'} type={'text'} />
                                     <Grid item size={{xs: 12, sm: 12, md: 3}}>
                                         <FormControlLabel
                                             control={
@@ -240,7 +275,8 @@ function AddProduct() {
                                             )}
                                         </FormControl>
                                     </Grid>
-                                    <UploadPreview file={file} setFile={setFile}/>
+                                    <UploadPreview file={file} setFile={setFile} imageUrl={imageUrl}
+                                                   setImageUrl={setImageUrl} id={params?.id}/>
                                     <Grid item size={12}>
                                         <InputLabel htmlFor="modifierGroupIds" marginBottom={2}>
                                             Ichki mahsulot qo'shish
@@ -249,8 +285,12 @@ function AddProduct() {
                                             {({push, remove}) => (
                                                 <Box display="flex" flexDirection="column" gap={2}>
                                                     <Grid item size={12}>
-                                                        <SearchInput  push={(findProduct)=>{
-                                                            push({name: findProduct.name, ingredientProductId: findProduct.id, quantity: 1});
+                                                        <SearchInput push={(findProduct) => {
+                                                            push({
+                                                                name: findProduct.name,
+                                                                ingredientProductId: findProduct.id,
+                                                                quantity: 1
+                                                            });
                                                         }} text={'Mahsulotni qidirish'}
                                                                      search={searchInput}
                                                                      setSearchInput={setSearchInput}/>

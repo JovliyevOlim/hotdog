@@ -1,4 +1,4 @@
-import {all, call, put, takeLatest,debounce} from "redux-saga/effects";
+import {all, call, put, takeLatest, debounce} from "redux-saga/effects";
 import ProductApi from "./productsApi";
 import {
     getProductFailed,
@@ -13,12 +13,23 @@ import {
     deleteProductRequest,
     getProductSearchRequest,
     getProductSearchSuccess,
-    getProductSearchFailed,
+    getProductSearchFailed, getProductByIdRequest, getProductByIdSuccess, getProductByIdFailed, updateProductRequest,
 } from "./productsSlice";
 
 function* addProduct(action) {
     try {
         const response = yield call(ProductApi.addProduct, action.payload);
+        yield put(addProductSuccess(response));
+        const data = yield call(ProductApi.getProduct, action.payload);
+        yield put(getProductSuccess(data));
+    } catch (err) {
+        yield put(addProductFailed(err.response?.data?.message || err.message));
+    }
+}
+
+function* updateProduct(action) {
+    try {
+        const response = yield call(ProductApi.updateProduct, action.payload);
         yield put(addProductSuccess(response));
         const data = yield call(ProductApi.getProduct, action.payload);
         yield put(getProductSuccess(data));
@@ -50,10 +61,23 @@ function* getProduct(action) {
                 };
             })
         );
-        console.log(productsWithImages);
         yield put(getProductSuccess(productsWithImages));
     } catch (err) {
         yield put(getProductFailed(err.response?.data?.message || err.message));
+    }
+}
+
+function* getProductById(action) {
+    try {
+        const response = yield call(ProductApi.getProductById, action.payload);
+        const imageUrl = yield call(getProductImage, response.id);
+        const productsWithImages = {
+            ...response,
+            imageUrl
+        }
+        yield put(getProductByIdSuccess(productsWithImages));
+    } catch (err) {
+        yield put(getProductByIdFailed(err.response?.data?.message || err.message));
     }
 }
 
@@ -85,8 +109,7 @@ function* deleteProduct(action) {
     try {
         const response = yield call(ProductApi.deleteProduct, action.payload);
         yield put(addProductSuccess(response));
-        const data = yield call(ProductApi.getProduct, action.payload);
-        yield put(getProductSuccess(data));
+        yield put(getProductRequest.type, getProduct(action));
     } catch (err) {
         yield put(addProductFailed(err.response?.data?.message || err.message));
     }
@@ -95,8 +118,10 @@ function* deleteProduct(action) {
 
 export default function* productsSaga() {
     yield takeLatest(addProductRequest.type, addProduct);
+    yield takeLatest(updateProductRequest.type, updateProduct);
     yield takeLatest(deleteProductRequest.type, deleteProduct);
     yield takeLatest(getProductRequest.type, getProduct);
+    yield takeLatest(getProductByIdRequest.type, getProductById);
     yield takeLatest(addProductImageRequest.type, addProductImage);
-    yield debounce(300,getProductSearchRequest.type, getProductSearch);
+    yield debounce(300, getProductSearchRequest.type, getProductSearch);
 }

@@ -12,16 +12,21 @@ import ActionButtons from "../../components/@extended/ActionButtons";
 
 function Index(props) {
 
-    const {products} = useSelector((state) => state.products);
+    const {products, isLoading} = useSelector((state) => state.products);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
         dispatch(getProductRequest())
-    }, [])
+    }, []);
 
 
     function onDelete(id) {
         dispatch(deleteProductRequest(id));
+    }
+
+
+    function onEdit(value) {
+        navigate("/products/update/" + value.id);
     }
 
     const columns = [
@@ -45,7 +50,7 @@ function Index(props) {
             label: 'Olish narxi',
             render: (value) => (
                 <Stack direction="row" sx={{gap: 1, alignItems: 'center'}}>
-                    {value ?  value.toFixed(2) || 0 : 0} so'm
+                    {value ? value.toFixed(2) || 0 : 0} so'm
                 </Stack>
             )
         },
@@ -80,6 +85,7 @@ function Index(props) {
             label: '',
             render: (value, row) => (
                 <ActionButtons
+                    onEdit={() => onEdit(row)}
                     onDelete={() => onDelete(value)}/>
             )
         }
@@ -93,10 +99,7 @@ function Index(props) {
                                          color="primary">
                           Add
                       </Button>}>
-                {
-                    products ? <CommonTable data={products} columns={columns}/> :
-                        <h2>Ma'lumot yo'q</h2>
-                }
+                <CommonTable data={products} columns={columns} loading={isLoading}/>
             </MainCard>
         </Grid>
     );

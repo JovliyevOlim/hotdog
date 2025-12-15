@@ -13,7 +13,7 @@ function CashProduct({list, setList}) {
 
     const {isLoading, isSuccess} = useSelector((state) => state.purchase)
 
-    const allSum = () => list.reduce((acc, cur) => acc + cur.price * cur.quantity, 0);
+    const allSum = () => list.reduce((acc, cur) => acc + (cur.option ? cur.price + cur.option.price : cur.price) * cur.quantity, 0);
     const dispatch = useDispatch();
     const contentRef = useRef(null);
     const reactToPrintFn = useReactToPrint({contentRef});
@@ -96,7 +96,8 @@ function CashProduct({list, setList}) {
                         <Box sx={{padding: '1rem'}}>
                             {
                                 list.map((item, index) =>
-                                    <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
+                                    <Box item={index}
+                                         sx={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
                                         <Typography variant='h4'>                    {item.name}
                                         </Typography>
                                         <Typography variant='h4'>

@@ -8,6 +8,11 @@ import {getProductRequest} from "../../api/products/productsSlice";
 import ProductCard from "./ProductCard";
 import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
+import ModifierModal from "./ModifierModal";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import AnimateButton from "../../components/@extended/AnimateButton";
 
 function Products({list, setList}) {
     const dispatch = useDispatch();
@@ -20,6 +25,10 @@ function Products({list, setList}) {
         imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1wIfe0OTZTVrAiTPYoQaxXui6L2P4FSYVbA&s"
     }));
     const [filterProducts, setFilterProducts] = useState(arr);
+    const [openModal, setOpenModal] = useState(false);
+    const [modifierOptions, setModifierOptions] = useState(null);
+    const [optionId, setOptionId] = useState(null);
+    const [product, setProduct] = useState(null);
 
     const [categoryId, setCategoryId] = useState(null);
 
@@ -34,12 +43,59 @@ function Products({list, setList}) {
         setFilterProducts(newArray);
     }, [products, categoryId]);
 
+
+    console.log(list)
+
+    function setSelectModifier() {
+        const findItem = modifierOptions.find((item) => item.id === optionId);
+        const newProduct = {
+            productId: product.id,
+            quantity: 1,
+            name: product.name,
+            price: product.price + findItem.price,
+            option: findItem,
+            modifierOptionIds: [findItem.id]
+        };
+
+        const isExist = list.some((item) => item.productId === product.id && item?.modifierOptionIds[0] === optionId);
+
+        let newList;
+
+        if (isExist) {
+            newList = list.map((item) =>
+                item.productId === product.id
+                    ? {...item, quantity: item.quantity + 1}
+                    : item
+            );
+        } else {
+            newList = [newProduct, ...list];
+        }
+        setList(newList);
+        setModifierOptions(null);
+        setOptionId(null);
+        setOpenModal(false)
+        setProduct(null);
+    }
+
     function setProducts(product) {
+        if (product.modifierGroups.length > 0) {
+            setOpenModal(true);
+            const options = product.modifierGroups[0].options
+            setModifierOptions(options);
+            setProduct(product);
+        } else {
+            addProduct(product);
+        }
+    }
+
+
+    function addProduct(product) {
         const newProduct = {
             productId: product.id,
             quantity: 1,
             name: product.name,
             price: product.price,
+            option: null,
         };
 
         const isExist = list.some((item) => item.productId === product.id);
@@ -58,7 +114,6 @@ function Products({list, setList}) {
 
         setList(newList);
     }
-
 
     return (
         <Box>
@@ -91,17 +146,37 @@ function Products({list, setList}) {
                     {
                         filterProducts && filterProducts.length > 0 ?
                             filterProducts.map(product => (
-                                <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}}>
-                                    <ProductCard item={product} key={product.id} setProducts={setProducts}/>
-                                </Grid>
-                            ))
+                                <ProductCard item={product} key={product.id} setProducts={setProducts}/>))
                             : <Typography sx={{width: '100%'}} variant={'h2'} align='center'>Mahsulot yo'q</Typography>
                     }
                 </Grid>
-
             </Box>
+            <ModifierModal open={openModal} handleClose={setOpenModal}>
+                <Typography variant={'h3'}>Qo'shimchalar</Typography>
+                <FormGroup>
+                    {
+                        modifierOptions && modifierOptions?.length > 0 &&
+                        modifierOptions.map(option =>
+                            <FormControlLabel key={option.id}
+                                              control={<Checkbox checked={option.id === optionId}
+                                                                 onChange={() => setOptionId(option.id)}/>}
+                                              label={option.name}/>
+                        )
+                    }
+                </FormGroup>
+                <Grid size={12} direction="column" display={'flex'} justifyContent="end" gap={2}>
+                    <AnimateButton>
+                        <Button onClick={() => setSelectModifier()} type='submit' loadingPosition="end"
+                                fullWidth size="large" variant="contained"
+                                color="primary">
+                            Saqlash
+                        </Button>
+                    </AnimateButton>
+                </Grid>
+            </ModifierModal>
         </Box>
-    );
+    )
+        ;
 }
 
 export default Products;

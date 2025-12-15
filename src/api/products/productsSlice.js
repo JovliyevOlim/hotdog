@@ -4,6 +4,7 @@ const slice = createSlice({
     name: "Product",
     initialState: {
         products: null,
+        product: null,
         productsSearch: null,
         token: null,
         isLoading: false,
@@ -27,6 +28,11 @@ const slice = createSlice({
             state.error = action.payload
         },
 
+        updateProductRequest: (state) => {
+            state.isLoading = true;
+            state.error = null
+        },
+
         deleteProductRequest: (state) => {
             state.isLoading = true;
             state.error = null
@@ -45,6 +51,19 @@ const slice = createSlice({
             state.error = action.payload
         },
 
+
+        getProductByIdRequest: (state) => {
+            state.isLoading = true;
+            state.error = null
+        },
+        getProductByIdSuccess: (state, action) => {
+            state.product = action.payload;
+            state.isLoading = false
+        },
+        getProductByIdFailed: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload
+        },
 
         getProductRequest: (state) => {
             state.isLoading = true;
@@ -94,6 +113,10 @@ export const {
     getProductSearchFailed,
     getProductSearchRequest,
     getProductSearchSuccess,
+    getProductByIdSuccess,
+    getProductByIdRequest,
+    getProductByIdFailed,
+    updateProductRequest,
     resetSuccess,
 } = slice.actions;
 export default slice.reducer;

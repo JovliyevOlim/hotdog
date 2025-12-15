@@ -10,7 +10,7 @@ import ActionButtons from "../../components/@extended/ActionButtons";
 
 function Index(props) {
 
-    const {supplier, isSuccess} = useSelector((state) => state.supplier);
+    const {supplier, isSuccess, isLoading} = useSelector((state) => state.supplier);
     const dispatch = useDispatch();
     const [modal, setModal] = useState(false);
     const [item, setItem] = useState(null);
@@ -60,10 +60,7 @@ function Index(props) {
                                          color="primary">
                           Qo'shish
                       </Button>}>
-                {
-                    supplier ? <CommonTable data={supplier} columns={columns}/> :
-                        <h2>Ma'lumot yo'q</h2>
-                }
+                <CommonTable data={supplier} columns={columns} loading={isLoading}/>
             </MainCard>
             <AddSupplier open={modal} onClose={setModal} setItem={setItem} item={item}/>
         </Grid>

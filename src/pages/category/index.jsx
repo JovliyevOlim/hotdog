@@ -15,7 +15,7 @@ import ActionButtons from "../../components/@extended/ActionButtons";
 
 function Index() {
 
-    const {category, isSuccess} = useSelector((state) => state.category);
+    const {category, isSuccess, isLoading} = useSelector((state) => state.category);
     const dispatch = useDispatch();
     const [modal, setModal] = useState(false);
     const [item, setItem] = useState(null);
@@ -41,8 +41,8 @@ function Index() {
         {
             id: "id",
             label: '',
-            render: (value,row) => (
-                <ActionButtons onEdit={() => onEdit(row)} onDelete={()=>onDelete(value)}/>
+            render: (value, row) => (
+                <ActionButtons onEdit={() => onEdit(row)} onDelete={() => onDelete(value)}/>
             )
         }
     ]
@@ -61,10 +61,7 @@ function Index() {
                                          color="primary">
                           Qo'shish
                       </Button>}>
-                {
-                    category ? <CommonTable data={category} columns={columns}/> :
-                        <h2>Ma'lumot yo'q</h2>
-                }
+                <CommonTable data={category} columns={columns} loading={isLoading}/>
             </MainCard>
             <AddCategory item={item} setItem={setItem} open={modal} onClose={setModal}/>
         </Grid>

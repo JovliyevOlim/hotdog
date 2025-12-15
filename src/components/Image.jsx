@@ -5,17 +5,17 @@ function Image({url}) {
 
     console.log('url', url);
     return (
-        <ImageList sx={{width:100, height: 150}} cols={1}>
-            <ImageListItem key={url}>
-                <img
-                    srcSet={url}
-                    src={url}
-                    alt={url}
-                    loading="lazy"
-                    style={{objectFit: "contain"}}
-                />
-            </ImageListItem>
-        </ImageList>
+        <>
+            <img
+                srcSet={url}
+                src={url}
+                alt={url}
+                width="100px"
+                height="100px"
+                loading="lazy"
+                style={{objectFit: "contain"}}
+            />
+        </>
     );
 }
 

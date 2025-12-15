@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import {DeleteOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
 import Button from "@mui/material/Button";
 
-function ProductListCard({item, increase, remove, decrease}) {
+function ProductListCard({item, increase, remove, decrease, key}) {
     return (
         <Card
             sx={{
@@ -33,7 +33,9 @@ function ProductListCard({item, increase, remove, decrease}) {
                         whiteSpace: 'nowrap'
                     }}
                 >
-                    {item.name}
+                    {item.name} {
+                    item.option && `+ ${item.option.name}`
+                }
                 </Typography>
                 <Typography
                     sx={{
@@ -48,15 +50,16 @@ function ProductListCard({item, increase, remove, decrease}) {
                         color: 'white',
                     }}
                 >
-                    <DeleteOutlined width={20} height={20} onClick={() => remove(item.productId)}
+                    <DeleteOutlined width={20} height={20} onClick={remove}
                     />
                 </Typography>
             </Box>
 
 
             <Typography variant="body1" sx={{fontWeight: 700, color: 'orange', textAlign: 'left'}}>
-                {item?.price} x {item?.quantity} = {(item?.price * item.quantity).toLocaleString()} so'm
+                {item?.price.toLocaleString()} x {item?.quantity} = {(item?.price * item.quantity).toLocaleString()} so'm
             </Typography>
+
             <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -68,7 +71,7 @@ function ProductListCard({item, increase, remove, decrease}) {
                     color="error"
                     size="small"
                     sx={{minWidth: 22, height: 22, padding: 0, borderRadius: '50%'}}
-                    onClick={() => decrease(item.productId)}
+                    onClick={decrease}
                 ><MinusOutlined/>
                 </Button>
 
@@ -81,11 +84,12 @@ function ProductListCard({item, increase, remove, decrease}) {
                     color="success"
                     size="small"
                     sx={{minWidth: 22, height: 22, padding: 0, borderRadius: "50%"}}
-                    onClick={() => increase(item.productId)}
+                    onClick={increase}
                 >
                     <PlusOutlined/>
                 </Button>
             </Box>
+
         </CardContent>
         </Card>
     );

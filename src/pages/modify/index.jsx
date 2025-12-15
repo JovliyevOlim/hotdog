@@ -12,7 +12,7 @@ import AddModifyOptions from "../../sections/modify/AddModifyOptions";
 
 function Index() {
 
-    const {modify, isSuccess} = useSelector((state) => state.modify);
+    const {modify, isSuccess, isLoading} = useSelector((state) => state.modify);
     const dispatch = useDispatch();
     const [modal, setModal] = useState(false);
     const [modalOptions, setModalOptions] = useState(false);
@@ -35,7 +35,7 @@ function Index() {
         dispatch(deleteModifyRequest(id));
     }
 
-    function onAddOptions(id,value) {
+    function onAddOptions(id, value) {
         setModalOptions(true);
         setItemOptions(value);
         setEditId(id);
@@ -66,7 +66,7 @@ function Index() {
             id: "id",
             label: '',
             render: (value, row) => (
-                <ActionButtons onEdit={() => onEdit(row)} onAdd={() => onAddOptions(value,null)}
+                <ActionButtons onEdit={() => onEdit(row)} onAdd={() => onAddOptions(value, null)}
                                onDelete={() => onDelete(value)}/>
             )
         }
@@ -87,13 +87,11 @@ function Index() {
                                          color="primary">
                           Qo'shish
                       </Button>}>
-                {
-                    modify ? <CommonTable data={modify} columns={columns}/> :
-                        <h2>Ma'lumot yo'q</h2>
-                }
+                <CommonTable data={modify} columns={columns} loading={isLoading}/>
             </MainCard>
             <AddModify item={item} setItem={setItem} open={modal} onClose={setModal}/>
-            <AddModifyOptions item={itemOptions} setItem={setItemOptions} open={modalOptions} id={EditId} onClose={setModalOptions}/>
+            <AddModifyOptions item={itemOptions} setItem={setItemOptions} open={modalOptions} id={EditId}
+                              onClose={setModalOptions}/>
         </Grid>
     );
 }

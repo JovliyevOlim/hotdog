@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 
-export default function UploadPreview({file,setFile}) {
+export default function UploadPreview({file, setFile, imageUrl, setImageUrl, id}) {
     const [previewUrl, setPreviewUrl] = useState(null);
     const [error, setError] = useState(null);
 
@@ -48,26 +48,13 @@ export default function UploadPreview({file,setFile}) {
             {/* File name */}
             {file && <p>Tanlangan fayl: {file.name}</p>}
 
-            {/* Preview */}
-            {previewUrl && (
+            {(previewUrl || imageUrl) && (
                 <>
-                    {/* Rasm bo‘lsa */}
-                    {file?.type.startsWith("image/") && (
-                        <img
-                            src={previewUrl}
-                            alt="preview"
-                            style={{width: "200px", borderRadius: "10px"}}
-                        />
-                    )}
-
-                    {/* Video bo‘lsa */}
-                    {file?.type.startsWith("video/") && (
-                        <video
-                            src={previewUrl}
-                            controls
-                            style={{width: "300px", borderRadius: "10px"}}
-                        />
-                    )}
+                    <img
+                        src={previewUrl ? previewUrl : imageUrl}
+                        alt="preview"
+                        style={{width: "100px", borderRadius: "10px",objectFit: "contain"}}
+                    />
                 </>
             )}
         </Grid>
