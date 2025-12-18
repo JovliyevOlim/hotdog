@@ -16,6 +16,10 @@ import {
     DeleteOutlined
 } from "@ant-design/icons";
 import {addModifyRequest, updateModifyRequest} from "../../api/modify/modifySlice";
+import Stack from "@mui/material/Stack";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormHelperText from "@mui/material/FormHelperText";
 
 function AddModify({open, onClose, item, setItem}) {
     const {isLoading} = useSelector((state) => state.modify);
@@ -36,10 +40,14 @@ function AddModify({open, onClose, item, setItem}) {
         setItem(null);
     }
 
+    console.log(item);
+    console.log(initialValues);
+
     useEffect(() => {
         if (item) {
             setInitialValues({
                 name: item.name,
+                options: item.options,
             });
         } else {
             setInitialValues({
@@ -100,22 +108,31 @@ function AddModify({open, onClose, item, setItem}) {
                     <form noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             <Grid size={12}>
-                                <CommonInput
-                                    name="name"
-                                    label="Nomi"
-                                    placeholder="Nomi"
-                                    fullWidth
-                                    type={"text"}
-                                />
+                                <Stack sx={{gap: 1}}>
+                                    <InputLabel htmlFor="name">Ism</InputLabel>
+                                    <OutlinedInput
+                                        id="name"
+                                        type="email"
+                                        value={values.name}
+                                        name="name"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Ism"
+                                        fullWidth
+                                        error={Boolean(touched.name && errors.name)}
+                                    />
+                                </Stack>
+                                {touched.name && errors.name && (
+                                    <FormHelperText error id="name">
+                                        {errors.name}
+                                    </FormHelperText>
+                                )}
                             </Grid>
                             <Grid size={12}>
                                 <FieldArray name="options">
                                     {({push, remove}) => (
                                         <>
                                             <Typography variant="h6">Options</Typography>
-                                            {
-                                                console.log(values)
-                                            }
                                             {values.options.map((option, index) => (
                                                 <Paper key={index} sx={{p: 2}}>
                                                     <Grid container spacing={2} alignItems="center">

@@ -3,8 +3,10 @@ import {createSlice} from "@reduxjs/toolkit";
 const slice = createSlice({
     name: "report",
     initialState: {
-        reportProfit:[],
-        reportDailyProfit:[],
+        reportProfit: [],
+        reportDailyProfit: [],
+        reportSale: [],
+        reportPurchase: [],
         isLoading: false,
         isSuccess: false,
         error: null,
@@ -36,6 +38,32 @@ const slice = createSlice({
             state.error = action.payload
         },
 
+        getReportSaleRequest: (state) => {
+            state.isLoading = true;
+            state.error = null
+        },
+        getReportSaleSuccess: (state, action) => {
+            state.reportSale = action.payload;
+            state.isLoading = false
+        },
+        getReportSaleFailed: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload
+        },
+
+        getReportPurchaseRequest: (state) => {
+            state.isLoading = true;
+            state.error = null
+        },
+        getReportPurchaseSuccess: (state, action) => {
+            state.reportPurchase = action.payload;
+            state.isLoading = false
+        },
+        getReportPurchaseFailed: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload
+        },
+
         resetSuccess: (state) => {
             state.isSuccess = false
             state.isImageSuccess = false
@@ -51,6 +79,12 @@ export const {
     getReportDailyProfitFailed,
     getReportDailyProfitSuccess,
     getReportDailyProfitRequest,
+    getReportSaleRequest,
+    getReportSaleSuccess,
+    getReportSaleFailed,
+    getReportPurchaseRequest,
+    getReportPurchaseSuccess,
+    getReportPurchaseFailed,
     resetSuccess,
 } = slice.actions;
 export default slice.reducer;

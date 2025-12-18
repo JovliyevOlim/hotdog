@@ -10,13 +10,16 @@ import {addCategoryRequest, updateCategoryRequest} from "../../api/category/cate
 import {useDispatch, useSelector} from "react-redux";
 import CommonInput from "../../components/CommonInput";
 import {addModifyOptionsRequest} from "../../api/modify/modifySlice";
+import Stack from "@mui/material/Stack";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
-function AddModifyOptions({open, onClose, item, setItem,id}) {
+function AddModifyOptions({open, onClose, item, setItem, id}) {
     const {isLoading} = useSelector((state) => state.modify);
     const dispatch = useDispatch();
     const [initialValues, setInitialValues] = useState({
         name: "",
-        price:0
+        price: 0
     });
 
 
@@ -33,7 +36,7 @@ function AddModifyOptions({open, onClose, item, setItem,id}) {
         } else {
             setInitialValues({
                 name: '',
-                price:0
+                price: 0
             });
         }
     }, [item]);
@@ -52,7 +55,7 @@ function AddModifyOptions({open, onClose, item, setItem,id}) {
                 onSubmit={(values, {setSubmitting, setErrors}) => {
                     if (item) {
                         try {
-                            dispatch(updateCategoryRequest({...values,id:item.id}));
+                            dispatch(updateCategoryRequest({...values, id: item.id}));
                             setSubmitting(false);
                         } catch (err) {
                             setErrors({submit: err.message});
@@ -69,26 +72,40 @@ function AddModifyOptions({open, onClose, item, setItem,id}) {
                     }
                 }}
             >
-                {({handleSubmit, resetForm}) => (
+                {({handleSubmit, resetForm, values, errors, handleBlur, handleChange, touched}) => (
                     <form noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             <Grid size={12}>
-                                <CommonInput
-                                    name="name"
-                                    label="Nomi"
-                                    placeholder="Nomi"
-                                    fullWidth
-                                    type={"text"}
-                                />
+                                <Stack sx={{gap: 1}}>
+                                    <InputLabel htmlFor="name">Ism</InputLabel>
+                                    <OutlinedInput
+                                        id="name"
+                                        type="text"
+                                        value={values.name}
+                                        name="name"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Ism"
+                                        fullWidth
+                                        error={Boolean(touched.name && errors.name)}
+                                    />
+                                </Stack>
                             </Grid>
                             <Grid size={12}>
-                                <CommonInput
-                                    name="price"
-                                    label="Narxi"
-                                    placeholder="Narxi"
-                                    fullWidth
-                                    type={"number"}
-                                />
+                                <Stack sx={{gap: 1}}>
+                                    <InputLabel htmlFor="price">Narxi</InputLabel>
+                                    <OutlinedInput
+                                        id="price"
+                                        type="number"
+                                        value={values.price}
+                                        name="price"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Narxi"
+                                        fullWidth
+                                        error={Boolean(touched.price && errors.price)}
+                                    />
+                                </Stack>
                             </Grid>
                             <Grid size={12} direction="column" display={'flex'} justifyContent="end" gap={2}>
                                 <AnimateButton>

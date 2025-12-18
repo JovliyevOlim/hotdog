@@ -86,7 +86,9 @@ function Index(props) {
             render: (value, row) => (
                 <ActionButtons
                     onEdit={() => onEdit(row)}
-                    onDelete={() => onDelete(value)}/>
+                    loading={isLoading}
+                    onDelete={() => onDelete(value)}
+                />
             )
         }
     ]

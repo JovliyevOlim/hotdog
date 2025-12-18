@@ -109,7 +109,7 @@ function* deleteProduct(action) {
     try {
         const response = yield call(ProductApi.deleteProduct, action.payload);
         yield put(addProductSuccess(response));
-        yield put(getProductRequest.type, getProduct(action));
+        yield put(getProductRequest());
     } catch (err) {
         yield put(addProductFailed(err.response?.data?.message || err.message));
     }

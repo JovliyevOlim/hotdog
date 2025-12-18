@@ -135,6 +135,7 @@ function Products({list, setList}) {
                 <Grid container
                       spacing={2}
                       justifyContent="start"
+                      alignContent="start"
                       sx={{
                           flexGrow: 1,
                           height: '100%',

@@ -24,31 +24,31 @@ export default function ProfileTab() {
     const dispatch = useDispatch();
     return (
         <List component="nav" sx={{p: 0, '& .MuiListItemIcon-root': {minWidth: 32}}}>
-            <ListItemButton>
-                <ListItemIcon>
-                    <EditOutlined/>
-                </ListItemIcon>
-                <ListItemText primary="Edit Profile"/>
-            </ListItemButton>
-            <ListItemButton>
-                <ListItemIcon>
-                    <UserOutlined/>
-                </ListItemIcon>
-                <ListItemText primary="View Profile"/>
-            </ListItemButton>
+            {/*<ListItemButton>*/}
+            {/*    <ListItemIcon>*/}
+            {/*        <EditOutlined/>*/}
+            {/*    </ListItemIcon>*/}
+            {/*    <ListItemText primary="Edit Profile"/>*/}
+            {/*</ListItemButton>*/}
+            {/*<ListItemButton>*/}
+            {/*    <ListItemIcon>*/}
+            {/*        <UserOutlined/>*/}
+            {/*    </ListItemIcon>*/}
+            {/*    <ListItemText primary="View Profile"/>*/}
+            {/*</ListItemButton>*/}
 
-            <ListItemButton>
-                <ListItemIcon>
-                    <ProfileOutlined/>
-                </ListItemIcon>
-                <ListItemText primary="Social Profile"/>
-            </ListItemButton>
-            <ListItemButton>
-                <ListItemIcon>
-                    <WalletOutlined/>
-                </ListItemIcon>
-                <ListItemText primary="Billing"/>
-            </ListItemButton>
+            {/*<ListItemButton>*/}
+            {/*    <ListItemIcon>*/}
+            {/*        <ProfileOutlined/>*/}
+            {/*    </ListItemIcon>*/}
+            {/*    <ListItemText primary="Social Profile"/>*/}
+            {/*</ListItemButton>*/}
+            {/*<ListItemButton>*/}
+            {/*    <ListItemIcon>*/}
+            {/*        <WalletOutlined/>*/}
+            {/*    </ListItemIcon>*/}
+            {/*    <ListItemText primary="Billing"/>*/}
+            {/*</ListItemButton>*/}
             <ListItemButton onClick={() => {
                 dispatch(logout());
                 navigate('/login');

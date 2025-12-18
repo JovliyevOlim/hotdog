@@ -66,7 +66,7 @@ function Index() {
             id: "id",
             label: '',
             render: (value, row) => (
-                <ActionButtons onEdit={() => onEdit(row)} onAdd={() => onAddOptions(value, null)}
+                <ActionButtons  onAdd={() => onAddOptions(value, null)}
                                onDelete={() => onDelete(value)}/>
             )
         }

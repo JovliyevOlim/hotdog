@@ -6,7 +6,11 @@ import {
     getReportProfitSuccess,
     getReportDailyProfitRequest,
     getReportDailyProfitSuccess,
-    getReportDailyProfitFailed
+    getReportDailyProfitFailed,
+    getReportSaleRequest,
+    getReportPurchaseRequest,
+    getReportSaleSuccess,
+    getReportSaleFailed, getReportPurchaseSuccess, getReportPurchaseFailed
 } from "./reportSlice";
 
 function* getReportProfit(action) {
@@ -27,8 +31,28 @@ function* getReportProfitDaily(action) {
     }
 }
 
+function* getReportSale(action) {
+    try {
+        const response = yield call(reportApi.reportSale, action.payload);
+        yield put(getReportSaleSuccess(response));
+    } catch (err) {
+        yield put(getReportSaleFailed(err.response?.data?.message || err.message));
+    }
+}
+
+function* getReportPurchase(action) {
+    try {
+        const response = yield call(reportApi.reportPurchase, action.payload);
+        yield put(getReportPurchaseSuccess(response));
+    } catch (err) {
+        yield put(getReportPurchaseFailed(err.response?.data?.message || err.message));
+    }
+}
+
 
 export default function* reportSaga() {
     yield takeLatest(getReportProfitRequest.type, getReportProfit);
     yield takeLatest(getReportDailyProfitRequest.type, getReportProfitDaily);
+    yield takeLatest(getReportSaleRequest.type, getReportSale);
+    yield takeLatest(getReportPurchaseRequest.type, getReportPurchase);
 }

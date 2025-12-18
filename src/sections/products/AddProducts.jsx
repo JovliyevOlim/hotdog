@@ -46,8 +46,8 @@ function AddProduct() {
         description: '',
         availableForSale: false,
         soldBy: "EACH",
-        price: '',
-        cost: '',
+        price: 0,
+        cost:0,
         sku: '',
         composite: false,
         trackStock: false,
@@ -125,6 +125,7 @@ function AddProduct() {
         }
     }, [isImageSuccess])
 
+
     return (
         <>
             <Grid rowSpacing={4.5} columnSpacing={2.75}>
@@ -143,6 +144,7 @@ function AddProduct() {
                                         ...values,
                                         modifierGroupIds: values.modifierGroupIds ? [values.modifierGroupIds] : [],
                                         id: params.id,
+                                        composite: values.ingredients.length > 0 ? true : false
                                     }));
                                     setSubmitting(false);
                                 } catch (err) {
@@ -153,7 +155,8 @@ function AddProduct() {
                                 try {
                                     dispatch(addProductRequest({
                                         ...values,
-                                        modifierGroupIds: values.modifierGroupIds ? [values.modifierGroupIds] : []
+                                        modifierGroupIds: values.modifierGroupIds ? [values.modifierGroupIds] : [],
+                                        composite: values.ingredients.length > 0 ? true : false
                                     }));
                                     setSubmitting(false);
                                 } catch (err) {
@@ -224,12 +227,12 @@ function AddProduct() {
                                     </Grid>
                                     <CommonInput name={'description'} label={'Tavsif'} type={'text'}
                                                  placeholder={'Tavsif'}/>
-                                    <CommonInput name={'quantity'} label={'Miqdor'} type={'number'} />
+                                    <CommonInput name={'quantity'} label={'Miqdor'} type={'number'}/>
                                     <CommonInput name={'lowQuantity'} label={'Ogohlantirish miqdori'} type={'number'}/>
                                     <CommonInput name={'cost'} label={'Olish narxi'} type={'number'}/>
-                                    <CommonInput name={'price'} label={'Sotish narxi'} type={'number'} />
+                                    <CommonInput name={'price'} label={'Sotish narxi'} type={'number'}/>
 
-                                    <CommonInput name={'sku'} label={'Sku'} type={'text'} />
+                                    <CommonInput name={'sku'} label={'Sku'} type={'text'}/>
                                     <Grid item size={{xs: 12, sm: 12, md: 3}}>
                                         <FormControlLabel
                                             control={
@@ -286,11 +289,13 @@ function AddProduct() {
                                                 <Box display="flex" flexDirection="column" gap={2}>
                                                     <Grid item size={12}>
                                                         <SearchInput push={(findProduct) => {
+                                                            console.log(findProduct)
                                                             push({
                                                                 name: findProduct.name,
                                                                 ingredientProductId: findProduct.id,
                                                                 quantity: 1
                                                             });
+                                                            console.log(values)
                                                         }} text={'Mahsulotni qidirish'}
                                                                      search={searchInput}
                                                                      setSearchInput={setSearchInput}/>

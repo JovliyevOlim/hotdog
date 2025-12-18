@@ -1,3 +1,35 @@
 * {
-  -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.rdrCalendarWrapper {
+    font-family: Roboto, sans-serif;
+}
+
+.rdrMonthName {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.rdrWeekDay {
+    font-weight: 500;
+    color: #666;
+}
+
+.rdrDayToday .rdrDayNumber span:after {
+    background: #1976d2;
+}
+
+.rdrDaySelected span,
+.rdrDayStartPreview span,
+.rdrDayEndPreview span {
+    background: #1976d2 !important;
+}
+
+.rdrDayHovered span {
+    border-color: #1976d2;
+}
+
+.rdrDayPassive {
+    opacity: 0.4;
 }
