@@ -14,29 +14,19 @@ import Box from '@mui/material/Box';
 
 // project imports
 import MainCard from 'components/MainCard';
-import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import AnalyticEcommerce from '../../components/cards/statistics/AnalyticEcommerce';
 import MonthlyBarChart from 'sections/dashboard/default/MonthlyBarChart';
 import ReportAreaChart from 'sections/dashboard/default/ReportAreaChart';
-import UniqueVisitorCard from 'sections/dashboard/default/UniqueVisitorCard';
+import UniqueVisitorCard from '../../sections/dashboard/default/UniqueVisitorCard';
 import SaleReportCard from 'sections/dashboard/default/SaleReportCard';
-import OrdersTable from 'sections/dashboard/default/OrdersTable';
+import OrdersTable from '../../sections/dashboard/default/OrdersTable';
 
-// assets
-import GiftOutlined from '@ant-design/icons/GiftOutlined';
-import MessageOutlined from '@ant-design/icons/MessageOutlined';
-import SettingOutlined from '@ant-design/icons/SettingOutlined';
-
-import avatar1 from 'assets/images/users/avatar-1.png';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {
     getReportDailyProfitRequest,
-    getReportProfitRequest,
-    getReportPurchaseRequest,
-    getReportSaleRequest
+    getReportPurchaseProductsRequest,
+    getReportSoldProductsRequest
 } from "../../api/report/reportSlice";
 import SelectDayFilter from "../../components/SelectDayFilter";
 import SalesTables from "../../sections/dashboard/default/SalesTables";
@@ -58,14 +48,12 @@ const actionSX = {
     transform: 'none'
 };
 
-// ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
 
 
     const dispatch = useDispatch();
     const {reportDailyProfit} = useSelector((state) => state.report);
-
     useEffect(() => {
         dispatch(getReportDailyProfitRequest());
     }, [])
@@ -76,13 +64,13 @@ export default function DashboardDefault() {
     end.setDate(start.getDate() + 7);
 
     const params = {
-        start: start.toISOString(),
-        end: end.toISOString(),
+        start: start.toISOString().slice(0, 10),
+        end: end.toISOString().slice(0, 10),
     };
 
     useEffect(() => {
-        dispatch(getReportSaleRequest(params))
-        dispatch(getReportPurchaseRequest(params))
+        dispatch(getReportSoldProductsRequest(params));
+        dispatch(getReportPurchaseProductsRequest(params));
     }, [])
 
     return (
@@ -142,28 +130,11 @@ export default function DashboardDefault() {
             {/*    </MainCard>*/}
             {/*</Grid>*/}
             {/* row 3 */}
-            <Grid size={{xs: 12, md: 6, lg: 6}}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid>
-                        <Typography variant="h5">Savdolar</Typography>
-                    </Grid>
-                    <Grid>
-                        <SelectDayFilter/>
-                    </Grid>
-                </Grid>
-                <MainCard sx={{mt: 2}} content={false}>
-                    <SalesTables/>
-                </MainCard>
+            <Grid size={{xs: 12, md: 6, lg: 6}} alignItems={'stretch'}>
+                <SalesTables/>
             </Grid>
             <Grid size={{xs: 12, md: 6, lg: 6}}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid>
-                        <Typography variant="h5">Recent Orders</Typography>
-                    </Grid>
-                </Grid>
-                <MainCard sx={{mt: 2}} content={false}>
-                    <OrdersTable/>
-                </MainCard>
+                <OrdersTable/>
             </Grid>
             {/*<Grid size={{xs: 12, md: 5, lg: 4}}>*/}
             {/*    <Grid container alignItems="center" justifyContent="space-between">*/}

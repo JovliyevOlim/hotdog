@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Box from "@mui/material/Box";
 import Products from "../../sections/sales/Products";
 import CashProduct from "../../sections/sales/CashProduct";
-import Button from "@mui/material/Button";
 
 function Index(props) {
 

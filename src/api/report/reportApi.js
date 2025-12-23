@@ -13,4 +13,13 @@ export default {
     reportPurchase: (data) => api.get("/purchase", {
         params: data,
     }).then(res => res.data),
+    reportSoldProducts: (data) => api.get("/analytics/sold-products", {
+        params: data,
+    }).then(res => res.data),
+    reportPurchasedProducts: (data) => api.get("/analytics/purchased-products", {
+        params: data,
+    }).then(res => res.data),
+    reportProfitExpense: (data) => api.get("/analytics/profit-expense", {
+        params: data,
+    }).then(res => res.data),
 };

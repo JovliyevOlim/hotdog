@@ -1,4 +1,4 @@
-import {all, call, put, takeLatest, debounce} from "redux-saga/effects";
+import {call, put, takeLatest} from "redux-saga/effects";
 import reportApi from "./reportApi";
 import {
     getReportProfitRequest,
@@ -7,10 +7,18 @@ import {
     getReportDailyProfitRequest,
     getReportDailyProfitSuccess,
     getReportDailyProfitFailed,
-    getReportSaleRequest,
-    getReportPurchaseRequest,
     getReportSaleSuccess,
-    getReportSaleFailed, getReportPurchaseSuccess, getReportPurchaseFailed
+    getReportSaleFailed,
+    getReportPurchaseSuccess,
+    getReportPurchaseFailed,
+    getReportSoldProductsRequest,
+    getReportSoldProductsSuccess,
+    getReportSoldProductsFailed,
+    getReportPurchaseProductsSuccess,
+    getReportPurchaseProductsFailed,
+    getReportPurchaseProductsRequest,
+    getReportProfitExpenseSuccess,
+    getReportProfitExpenseRequest,
 } from "./reportSlice";
 
 function* getReportProfit(action) {
@@ -49,10 +57,38 @@ function* getReportPurchase(action) {
     }
 }
 
+function* getReportSoldProductsRequestAll(action) {
+    try {
+        const response = yield call(reportApi.reportSoldProducts, action.payload);
+        yield put(getReportSoldProductsSuccess(response));
+    } catch (err) {
+        yield put(getReportSoldProductsFailed(err.response?.data?.message || err.message));
+    }
+}
+
+function* getReportPurchaseProductsRequestAll(action) {
+    try {
+        const response = yield call(reportApi.reportPurchasedProducts, action.payload);
+        yield put(getReportPurchaseProductsSuccess(response));
+    } catch (err) {
+        yield put(getReportPurchaseProductsFailed(err.response?.data?.message || err.message));
+    }
+}
+function* getProfitExpenseAll(action) {
+    try {
+        const response = yield call(reportApi.reportProfitExpense, action.payload);
+        yield put(getReportProfitExpenseSuccess(response));
+    } catch (err) {
+        yield put(getReportProfitFailed(err.response?.data?.message || err.message));
+    }
+}
+
 
 export default function* reportSaga() {
     yield takeLatest(getReportProfitRequest.type, getReportProfit);
     yield takeLatest(getReportDailyProfitRequest.type, getReportProfitDaily);
-    yield takeLatest(getReportSaleRequest.type, getReportSale);
-    yield takeLatest(getReportPurchaseRequest.type, getReportPurchase);
+    yield takeLatest(getReportSoldProductsRequest.type, getReportSoldProductsRequestAll);
+    yield takeLatest(getReportPurchaseProductsRequest.type, getReportPurchaseProductsRequestAll);
+    yield takeLatest(getReportPurchaseProductsRequest.type, getReportPurchaseProductsRequestAll);
+    yield takeLatest(getReportProfitExpenseRequest.type, getProfitExpenseAll);
 }

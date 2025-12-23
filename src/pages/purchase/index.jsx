@@ -62,6 +62,12 @@ function Purchase() {
                                 .slice(0, 10),
                             notes: "",
                             items: [],
+                            extraCosts:[
+                                {
+                                    name:"string",
+                                    amount:0
+                                }
+                            ]
                         }}
                         validationSchema={Yup.object().shape({
                             supplierId: Yup.string().required("Ta'minotchini tanlang!"),

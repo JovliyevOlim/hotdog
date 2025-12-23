@@ -5,8 +5,9 @@ const slice = createSlice({
     initialState: {
         reportProfit: [],
         reportDailyProfit: [],
-        reportSale: [],
-        reportPurchase: [],
+        reportSoldProducts: null,
+        reportPurchaseProducts: null,
+        reportProfitExpense: null,
         isLoading: false,
         isSuccess: false,
         error: null,
@@ -38,28 +39,42 @@ const slice = createSlice({
             state.error = action.payload
         },
 
-        getReportSaleRequest: (state) => {
+
+        getReportSoldProductsRequest: (state) => {
             state.isLoading = true;
             state.error = null
         },
-        getReportSaleSuccess: (state, action) => {
-            state.reportSale = action.payload;
+        getReportSoldProductsSuccess: (state, action) => {
+            state.reportSoldProducts = action.payload;
             state.isLoading = false
         },
-        getReportSaleFailed: (state, action) => {
+        getReportSoldProductsFailed: (state, action) => {
             state.isLoading = false;
             state.error = action.payload
         },
 
-        getReportPurchaseRequest: (state) => {
+        getReportPurchaseProductsRequest: (state) => {
             state.isLoading = true;
             state.error = null
         },
-        getReportPurchaseSuccess: (state, action) => {
-            state.reportPurchase = action.payload;
+        getReportPurchaseProductsSuccess: (state, action) => {
+            state.reportPurchaseProducts = action.payload;
             state.isLoading = false
         },
-        getReportPurchaseFailed: (state, action) => {
+        getReportPurchaseProductsFailed: (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload
+        },
+
+        getReportProfitExpenseRequest: (state) => {
+            state.isLoading = true;
+            state.error = null
+        },
+        getReportProfitExpenseSuccess: (state, action) => {
+            state.reportProfitExpense = action.payload;
+            state.isLoading = false
+        },
+        getReportProfitExpenseFailed: (state, action) => {
             state.isLoading = false;
             state.error = action.payload
         },
@@ -79,12 +94,19 @@ export const {
     getReportDailyProfitFailed,
     getReportDailyProfitSuccess,
     getReportDailyProfitRequest,
-    getReportSaleRequest,
     getReportSaleSuccess,
     getReportSaleFailed,
-    getReportPurchaseRequest,
     getReportPurchaseSuccess,
     getReportPurchaseFailed,
+    getReportSoldProductsRequest,
+    getReportSoldProductsSuccess,
+    getReportSoldProductsFailed,
+    getReportPurchaseProductsRequest,
+    getReportPurchaseProductsSuccess,
+    getReportPurchaseProductsFailed,
+    getReportProfitExpenseSuccess,
+    getReportProfitExpenseRequest,
+    getReportProfitExpenseFailed,
     resetSuccess,
 } = slice.actions;
 export default slice.reducer;
