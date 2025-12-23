@@ -57,7 +57,7 @@ function Purchase() {
                     <Formik
                         initialValues={{
                             supplierId: "",
-                            purchasedDate: new Date("2025-11-27T17:47:11.932Z")
+                            purchasedDate: new Date()
                                 .toISOString()
                                 .slice(0, 10),
                             notes: "",

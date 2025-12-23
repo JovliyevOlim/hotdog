@@ -40,6 +40,10 @@ const columns = [
         label: 'Nomi'
     },
     {
+        id: 'sku',
+        label: 'Sku'
+    },
+    {
         id: 'totalOrder',
         label: 'Sotilgan miqdor'
     },

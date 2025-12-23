@@ -54,30 +54,30 @@ export default function DashboardDefault() {
 
     const dispatch = useDispatch();
     const {reportDailyProfit} = useSelector((state) => state.report);
+    const [range, setRange] = useState(
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+        },
+    );
     useEffect(() => {
-        dispatch(getReportDailyProfitRequest());
+        dispatch(getReportDailyProfitRequest({
+            start: range.startDate.toISOString(),
+            end: range.endDate.toISOString(),
+        }));
     }, [])
 
-    const start = new Date();
 
-    const end = new Date(start);
-    end.setDate(start.getDate() + 7);
-
-    const params = {
-        start: start.toISOString().slice(0, 10),
-        end: end.toISOString().slice(0, 10),
-    };
-
-    useEffect(() => {
-        dispatch(getReportSoldProductsRequest(params));
-        dispatch(getReportPurchaseProductsRequest(params));
-    }, [])
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-            {/* row 1 */}
-            <Grid sx={{mb: -2.25}} size={12}>
-                <Typography variant="h5">Dashboard</Typography>
+            <Grid container alignItems="center" justifyContent="space-between">
+                <Grid>
+                    <Typography variant="h5">Dashboard</Typography>
+                </Grid>
+                <Grid>
+                    <SelectDayFilter value={range} setValue={setRange}/>
+                </Grid>
             </Grid>
             {
                 reportDailyProfit &&

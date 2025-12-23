@@ -9,10 +9,10 @@ import {useDispatch, useSelector} from "react-redux";
 import Spinner from "../../../components/Spinner";
 import {TableHead, TablePagination} from "@mui/material";
 import {useEffect, useState} from "react";
-import {getReportSoldProductsRequest} from "../../../api/report/reportSlice";
 import Grid from "@mui/material/Grid2";
 import SelectDayFilter from "../../../components/SelectDayFilter";
 import MainCard from "../../../components/MainCard";
+import {getReportPurchaseProductsRequest} from "../../../api/report/reportSlice";
 
 
 function CommonTableHead({columns}) {
@@ -40,6 +40,10 @@ const columns = [
         label: 'Nomi'
     },
     {
+        id: 'sku',
+        label: 'Sku'
+    },
+    {
         id: 'totalOrder',
         label: 'Sotilgan miqdor'
     },
@@ -64,7 +68,7 @@ export default function OrderTable() {
     );
 
     useEffect(() => {
-        dispatch(getReportSoldProductsRequest(
+        dispatch(getReportPurchaseProductsRequest(
             {
                 start: range.startDate.toISOString().slice(0, 10),
                 end: range.endDate.toISOString().slice(0, 10),
