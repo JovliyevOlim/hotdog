@@ -1,52 +1,17 @@
-// material-ui
-import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid2';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
-// project imports
-import MainCard from 'components/MainCard';
+import Grid from '@mui/material/Grid2';
+import Typography from '@mui/material/Typography';
+
 import AnalyticEcommerce from '../../components/cards/statistics/AnalyticEcommerce';
-import MonthlyBarChart from 'sections/dashboard/default/MonthlyBarChart';
-import ReportAreaChart from 'sections/dashboard/default/ReportAreaChart';
 import UniqueVisitorCard from '../../sections/dashboard/default/UniqueVisitorCard';
-import SaleReportCard from 'sections/dashboard/default/SaleReportCard';
 import OrdersTable from '../../sections/dashboard/default/OrdersTable';
 
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {
     getReportDailyProfitRequest,
-    getReportPurchaseProductsRequest,
-    getReportSoldProductsRequest
 } from "../../api/report/reportSlice";
-import SelectDayFilter from "../../components/SelectDayFilter";
 import SalesTables from "../../sections/dashboard/default/SalesTables";
-
-// avatar style
-const avatarSX = {
-    width: 36,
-    height: 36,
-    fontSize: '1rem'
-};
-
-// action style
-const actionSX = {
-    mt: 0.75,
-    ml: 1,
-    top: 'auto',
-    right: 'auto',
-    alignSelf: 'flex-start',
-    transform: 'none'
-};
 
 
 export default function DashboardDefault() {
@@ -54,30 +19,17 @@ export default function DashboardDefault() {
 
     const dispatch = useDispatch();
     const {reportDailyProfit} = useSelector((state) => state.report);
-    const [range, setRange] = useState(
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-        },
-    );
     useEffect(() => {
-        dispatch(getReportDailyProfitRequest({
-            start: range.startDate.toISOString(),
-            end: range.endDate.toISOString(),
-        }));
+        dispatch(getReportDailyProfitRequest());
     }, [])
 
 
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-            <Grid container alignItems="center" justifyContent="space-between">
-                <Grid>
-                    <Typography variant="h5">Dashboard</Typography>
-                </Grid>
-                <Grid>
-                    <SelectDayFilter value={range} setValue={setRange}/>
-                </Grid>
+            {/* row 1 */}
+            <Grid sx={{mb: -2.25}} size={12}>
+                <Typography variant="h5">Dashboard</Typography>
             </Grid>
             {
                 reportDailyProfit &&
