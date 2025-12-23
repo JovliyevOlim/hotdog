@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid2";
 import MainCard from "../../components/MainCard";
 import CommonTable from "../../components/Table";
@@ -9,16 +9,29 @@ import {useNavigate} from "react-router";
 import Stack from "@mui/material/Stack";
 import Image from "../../components/Image";
 import ActionButtons from "../../components/@extended/ActionButtons";
+import TextField from "@mui/material/TextField";
 
 function Index(props) {
 
     const {products, isLoading} = useSelector((state) => state.products);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const [search, setSearch] = useState('');
+
+
     useEffect(() => {
         dispatch(getProductRequest())
     }, []);
 
+
+    const filteredProducts = React.useMemo(() => {
+        if (!search) return products;
+
+        return products.filter(p =>
+            p.name?.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [products, search]);
 
     function onDelete(id) {
         dispatch(deleteProductRequest(id));
@@ -101,7 +114,18 @@ function Index(props) {
                                          color="primary">
                           Add
                       </Button>}>
-                <CommonTable data={products} columns={columns} loading={isLoading}/>
+                <Grid container spacing={2} marginBottom={2}>
+                    <Grid item size={12}>
+                        <TextField
+                            fullWidth
+                            size="small"
+                            placeholder="Mahsulot nomi..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </Grid>
+                </Grid>
+                <CommonTable data={filteredProducts} columns={columns} loading={isLoading}/>
             </MainCard>
         </Grid>
     );
